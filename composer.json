@@ -1,16 +1,16 @@
 {
-    "name": "alko-price-list-app",
+    "name": "esa-kian/draivi",
     "description": "A PHP app for fetching, storing, and displaying Alko price data with currency conversion.",
     "require": {
         "php": "^8.0",
         "ext-pdo": "*",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.0",   
-        "phpoffice/phpspreadsheet": "^1.18",  
-        "vlucas/phpdotenv": "^5.3" 
+        "guzzlehttp/guzzle": "^7.0",
+        "phpoffice/phpspreadsheet": "^1.18",
+        "vlucas/phpdotenv": "^5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5" 
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {
