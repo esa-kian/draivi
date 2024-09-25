@@ -32,9 +32,37 @@ class ProductRepository
         $stmt->execute([':amount' => $amount, ':id' => $id]);
     }
 
+    // Increment order_amount by 1
+    public function incrementOrderAmount(int $id): void
+    {
+        $stmt = $this->pdo->prepare("UPDATE products SET order_amount = order_amount + 1 WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+
+    // Clear order_amount (set to 0)
+    public function clearOrderAmount(int $id): void
+    {
+        $stmt = $this->pdo->prepare("UPDATE products SET order_amount = 0 WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+
     public function getAll(): array
     {
         $stmt = $this->pdo->query("SELECT * FROM products");
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Product::class);
+        return $stmt->fetchAll();
+    }
+
+    public function getOrderAmount(int $id): int
+    {
+        $stmt = $this->pdo->prepare("SELECT order_amount FROM products WHERE id = ?");
+        $stmt->execute([$id]);
+        return (int) $stmt->fetchColumn();
+    }
+
+
+    public function empty(): void
+    {
+        $stmt = $this->pdo->prepare("TRUNCATE products");
+        $stmt->execute();
     }
 }

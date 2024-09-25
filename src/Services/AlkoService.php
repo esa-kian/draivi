@@ -9,25 +9,32 @@ class AlkoService
 {
     public function __construct(private string $excelUrl) {}
 
-    public function fetchProductData(): array
+    public function fetchProductData(array $products)
     {
-        $file = file_get_contents($this->excelUrl);
-        file_put_contents('alko_prices.xlsx', $file);
+        // error_log(print_r($products, true)); // Use appropriate logging for your application
 
-        $spreadsheet = IOFactory::load('alko_prices.xlsx');
-        $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+        $productDTOs = [];
 
-        $products = [];
+        foreach ($products as $product) {
+            // Assuming the first row is headers
+            if ($product[0] === 'Numero') {
+                continue;
+            }
 
-        foreach ($sheetData as $row) {
-            $products[] = new ProductDTO(
-                $row['A'], // "Numero"
-                $row['B'], // "Nimi"
-                $row['C'], // "Pullokoko"
-                (float) $row['D'] // "Hinta"
-            );
+            // Validate data
+            $number = isset($product[0]) ? (string)$product[0] : '';
+            $name = isset($product[1]) ? (string)$product[1] : '';
+            $bottleSize = isset($product[3]) ? (string)$product[3] : '';
+            $priceEur = isset($product[4]) ? (float)$product[4] : 0.0;
+
+            // Skip invalid entries
+            if (empty($number) || empty($name)) {
+                continue; // Skip this entry if the number or name is missing
+            }
+
+            $productDTOs[] = new ProductDTO($number, $name, $bottleSize, $priceEur);
         }
 
-        return $products;
+        return $productDTOs;
     }
 }

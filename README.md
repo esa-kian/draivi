@@ -11,6 +11,7 @@ This is a PHP application that fetches Alko's daily price list, converts prices 
 - [Usage](#usage)
 - [Running Tests](#running-tests)
 - [Directory Structure](#directory-structure)
+- [Scheduling the PHP Script with Cron](#scheduling-the-php-script-with-cron)
 - [License](#license)
 
 ## Features
@@ -63,30 +64,9 @@ composer install
     ```
 
 ### Step 4: Configuration
-You can configure the app using either config.php or .env.
+You can configure the app using either  `.env`
 
-Option 1: Using `config.php`
-Edit the `config.php` file in the root directory and provide your database credentials, CurrencyLayer API key, and the Alko price list URL.
-
-```php
-return [
-    'db' => [
-        'dsn' => 'mysql:host=localhost;dbname=alko_prices;charset=utf8mb4',
-        'username' => 'your_database_user',
-        'password' => 'your_database_password',
-    ],
-    'currency' => [
-        'apiKey' => 'your_currencylayer_api_key',
-    ],
-    'alko' => [
-        'excelUrl' => 'https://www.alko.fi/valikoimat-ja-hinnasto/hinnasto',
-    ],
-];
-
-```
-
-#### Option 2: Using `.env` (Recommended)
-If you'd prefer to use environment variables, create a `.env` file from the provided `.env.example` file:
+Create a `.env` file from the provided `.env.example` file:
 
 ```bash
 cp .env.example .env
@@ -104,7 +84,7 @@ ALKO_EXCEL_URL="https://www.alko.fi/valikoimat-ja-hinnasto/hinnasto"
 ### Step 5: Run the script to fetch and store data
 After configuring the database and API keys, run the script that fetches the Alko price list, retrieves the latest exchange rates, and stores the data in the database:
 ```bash
-php scripts/update_prices.php
+php public/retrieve.php
 ```
 
 This script will:
@@ -138,8 +118,6 @@ This page includes two buttons:
 
 Both actions update the database without reloading the page using AJAX.
 
-Running Tests
-To run unit tests for the application, ensure PHPUnit is installed via Composer. Then run:
 
 ## Running Tests
 To run unit tests for the application, ensure PHPUnit is installed via Composer. Then run:
@@ -170,17 +148,31 @@ The project's directory structure is organized as follows:
 ├── README.md               # Project documentation
 └── .env                    # Environment configuration (optional)
 ```
+## Scheduling the PHP Script with Cron
+
+To automate the execution of the `retrieve.php` file every day at 8:00 AM, you can use `cron`, a time-based job scheduler in Unix-like operating systems. Follow these steps:
+
+1. **Open the Crontab Configuration:**
+Run the following command in your terminal to edit the crontab configuration for the current user:
+   ```bash
+   crontab -e
+   ```
+
+2. **Add a New Cron Job:**
+Add the following line to the crontab file:
+    ```bash
+    0 8 * * * /usr/bin/php /path/to/project/public/retrieve.php >> /path/to/project/logs/output.log 2>&1
+    ```
+
+
+- `0 8 * * *` specifies that the command should run at 8:00 AM every day.
+- `/usr/bin/php` should be replaced with the path to your PHP executable, which you can find by running `which php` in the terminal.
+- `/path/to/project/public/retrieve.php` should be replaced with the actual path to your `retrieve.php` file.
+- `>> /path/to/project/logs/output.log 2>&1` redirects standard output and errors to a log file, allowing you to review the output of the script execution.
+
+3. **Save and Exit:**
+After adding the line, save the changes and exit the editor. The cron job will now be scheduled to run the specified PHP script at the designated time.
 
 ## License
 
 This project is open-source and available under the MIT License.
-
-### Explanation of Sections
-
-1. **Features**: Provides a summary of the key features of the app.
-2. **Requirements**: Lists the required software and extensions for running the app.
-3. **Installation**: Detailed instructions to set up the project locally, including dependencies and configuration.
-4. **Usage**: Instructions on how to run the app, including the frontend (AJAX interface).
-5. **Running Tests**: Instructions to run unit tests using PHPUnit.
-6. **Directory Structure**: Describes the organization of the project files.
-7. **License**: Information about the open-source license used for the project.
