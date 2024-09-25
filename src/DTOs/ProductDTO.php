@@ -11,10 +11,10 @@ class ProductDTO
 
     public function __construct(string $number, string $name, string $bottleSize, float $priceEur)
     {
-        $this->number = $number ?: ''; // Default to empty string if null
+        $this->number = $number ?: ''; 
         $this->name = $name ?: '';
         $this->bottleSize = $bottleSize ?: '';
-        $this->priceEur = $priceEur >= 0 ? $priceEur : 0.0; // Ensure price is not negative
+        $this->priceEur = $priceEur >= 0 ? $priceEur : 0.0; 
     }
 
     public function toEntity(float $priceGbp): \App\Models\Product

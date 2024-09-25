@@ -32,14 +32,12 @@ class ProductRepository
         $stmt->execute([':amount' => $amount, ':id' => $id]);
     }
 
-    // Increment order_amount by 1
     public function incrementOrderAmount(int $id): void
     {
         $stmt = $this->pdo->prepare("UPDATE products SET order_amount = order_amount + 1 WHERE id = ?");
         $stmt->execute([$id]);
     }
 
-    // Clear order_amount (set to 0)
     public function clearOrderAmount(int $id): void
     {
         $stmt = $this->pdo->prepare("UPDATE products SET order_amount = 0 WHERE id = ?");

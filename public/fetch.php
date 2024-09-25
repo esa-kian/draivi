@@ -5,24 +5,20 @@ use App\Repositories\ProductRepository;
 use App\Controllers\ProductController;
 use App\Services\AlkoService;
 use App\Services\CurrencyService;
-// Autoload classes (via Composer)
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// Get config
 $config = require __DIR__ . '/../config.php';
 $alkoService = new AlkoService($config['alko']['excelUrl']);
 $currencyService = new CurrencyService($config['currency']['apiKey']);
-// Set up connection and repository
+
 $connection = new Connection($config['db']['dsn'], $config['db']['username'], $config['db']['password']);
 $productRepository = new ProductRepository($connection->getPdo());
 
-// Initialize the controller
 $productController = new ProductController($alkoService, $currencyService, $productRepository);
 
-// Get all products
 $products = $productController->listProducts();
 
-// Output the HTML table
 echo "<table>";
 foreach ($products as $product) {
     $number = htmlspecialchars($product['number']);
@@ -51,7 +47,6 @@ echo "</table>";
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle Add button click
         document.querySelectorAll('.add-btn').forEach(function(button) {
             button.addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
@@ -59,7 +54,6 @@ echo "</table>";
             });
         });
 
-        // Handle Clear button click
         document.querySelectorAll('.clear-btn').forEach(function(button) {
             button.addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
@@ -67,16 +61,14 @@ echo "</table>";
             });
         });
 
-        // Function to send AJAX request to update.php
         function updateOrderAmount(id, action) {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/public/update.php', true); // Adjust the path if needed
+            xhr.open('POST', '/public/update.php', true); 
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     try {
-                        // Parse the response from the server
                         const response = JSON.parse(xhr.responseText);
 
                         if (response.status === 'success') {
@@ -92,7 +84,6 @@ echo "</table>";
                 }
             };
 
-            // Send the AJAX request with product ID and action
             xhr.send(`id=${id}&action=${action}`);
         }
     });

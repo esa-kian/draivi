@@ -9,7 +9,6 @@ use App\Services\CurrencyService;
 
 $config = require '../config.php';
 ini_set('memory_limit', '8000M');
-// Setup dependencies
 $connection = new Connection($config['db']['dsn'], $config['db']['username'], $config['db']['password']);
 $alkoService = new AlkoService($config['alko']['excelUrl']);
 $currencyService = new CurrencyService($config['currency']['apiKey']);
