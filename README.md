@@ -12,6 +12,7 @@ This is a PHP application that fetches Alko's daily price list, converts prices 
 - [Running Tests](#running-tests)
 - [Directory Structure](#directory-structure)
 - [Scheduling the PHP Script with Cron](#scheduling-the-php-script-with-cron)
+- [Instructions for Docker Usage](#instructions-for-docker-usage)
 - [License](#license)
 
 ## Features
@@ -172,6 +173,25 @@ Add the following line to the crontab file:
 
 3. **Save and Exit:**
 After adding the line, save the changes and exit the editor. The cron job will now be scheduled to run the specified PHP script at the designated time.
+
+
+## Instructions for Docker Usage
+1. **Build the Docker Image:**
+
+### NOTE: 
+- Make sure to update the `DB_DSN` variable in your `.env` file with the correct database connection details to ensure proper connectivity.
+
+```
+docker build -t php-alko-app .
+```
+2. **Run the Container:**
+```
+docker run -p -d 8000:80 php-alko-app
+```
+3. **Stop the Container:**
+```
+docker stop php-alko-app
+```
 
 ## License
 

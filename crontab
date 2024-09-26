@@ -1,0 +1,2 @@
+# Run the PHP script at 8:00 AM every day
+0 8 * * * /usr/bin/php /var/www/html/retrieve.php >> /var/log/cron.log 2>&1
