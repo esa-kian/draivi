@@ -1,4 +1,4 @@
-# Draivi
+# Alko Price List
 
 This is a PHP application that fetches Alko's daily price list, converts prices to GBP using the CurrencyLayer API, and stores the data in a MySQL database. It also provides a front-end to list the products and modify the order amounts using AJAX.
 
